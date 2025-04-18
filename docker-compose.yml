@@ -2,6 +2,7 @@ services:
   # MongoDB service
   mongo:
     image: mongo:latest
+    platform: linux/amd64
     container_name: studentmanagementsystem-mongo-1
     ports:
       - "27017:27017"
