@@ -3,17 +3,18 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  apiKey: "AIzaSyBiozLd-sLUUehzemkCFIExq7OQI8Do0r0",
+  authDomain: "studentmanagementsystem-42862.firebaseapp.com",
+  projectId: "studentmanagementsystem-42862",
+  storageBucket: "studentmanagementsystem-42862.firebasestorage.app",
+  messagingSenderId: "230656990619",
+  appId: "1:230656990619:web:906f61a86f8029908f553e",
+  measurementId: "G-BLQ1TMFVER"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
 const googleProvider = new GoogleAuthProvider();
 
-export { auth, googleProvider };
+export { auth, googleProvider  };
