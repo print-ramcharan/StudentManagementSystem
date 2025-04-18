@@ -14,7 +14,7 @@ COPY --from=build /app/build /app/build
 RUN npm install -g serve
 
 # Expose the default port 3000
-EXPOSE 3000
+EXPOSE 8000
 
 # Use a shell command to run the app with the serve package
-CMD ["sh", "-c", "serve -s build -l 3000"]
+CMD ["sh", "-c", "serve -s build -l 8000"]
