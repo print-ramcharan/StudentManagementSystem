@@ -54,7 +54,7 @@
 services:
   # MongoDB service
   mongo:
-    image: mongo:latest
+    image: mongo:5.0
     container_name: studentmanagementsystem-mongo-1
     platform: linux/amd64
     ports:
