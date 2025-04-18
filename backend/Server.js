@@ -17,6 +17,11 @@ mongoose.connect('mongodb://mongo:27017/student_management_system')
 
 app.use('/students', studentRoutes);
 app.use('/users', userRoutes);
+// Health check route
+app.get('/', (req, res) => {
+    res.send('Server is running');
+    res.status(200);
+});
 
 const PORT = process.env.PORT || 6969;
 app.listen(PORT, () => {
