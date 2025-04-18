@@ -1,0 +1,13 @@
+# dependencies
+node_modules
+.env
+
+# build
+build
+dist
+
+# Docker volumes/data
+data
+
+# system files
+.DS_Store

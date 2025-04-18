@@ -1,0 +1,53 @@
+services:
+  # MongoDB service
+  mongo:
+    image: mongo:latest
+    container_name: studentmanagementsystem-mongo-1
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - studentnetwork
+
+  # Backend service (Node.js)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile  # Ensure the backend Dockerfile exists in the backend folder
+    container_name: studentmanagementsystem-backend
+    ports:
+      - "6969:6969"  # Adjust according to your backend server's port
+    depends_on:
+      - mongo
+    networks:
+      - studentnetwork
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/student_management_system
+      - NODE_ENV=production
+      - PORT=6969
+    volumes:
+      - ./backend:/app
+
+  # Frontend service (React, for example)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile  # Ensure the frontend Dockerfile exists in the frontend folder
+    container_name: studentmanagementsystem-frontend
+    ports:
+      - "3000:3000"  # Adjust according to your frontend server's port
+    depends_on:
+      - backend
+    networks:
+      - studentnetwork
+    volumes:
+      - ./frontend:/app
+
+networks:
+  studentnetwork:
+    driver: bridge
+
+volumes:
+  student_data:
+    driver: local
