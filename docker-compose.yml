@@ -12,9 +12,7 @@ services:
 
   # Backend service (Node.js)
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile  # Ensure the backend Dockerfile exists in the backend folder
+    image: ramcharanpolabathina/studentmanagement-backend:latest
     container_name: studentmanagementsystem-backend
     ports:
       - "6969:6969"  # Adjust according to your backend server's port
@@ -31,9 +29,7 @@ services:
 
   # Frontend service (React, for example)
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile  # Ensure the frontend Dockerfile exists in the frontend folder
+    image: ramcharanpolabathina/studentmanagement-frontend:latest
     container_name: studentmanagementsystem-frontend
     ports:
       - "3000:3000"  # Adjust according to your frontend server's port

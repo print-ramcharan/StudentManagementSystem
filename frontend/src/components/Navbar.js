@@ -32,14 +32,14 @@ function Navbar({ user }) {
   return (
     <>
       <style>{`
-       .custom-navbar {
-  background-color: #fff;
-  padding: 1rem 1.5rem;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  border-bottom: none !important;
-  box-shadow: none !important;
-}
-
+        .custom-navbar {
+          background-color: #fff;
+          padding: 0.8rem 1.5rem;
+          font-family: 'Inter', 'Segoe UI', sans-serif;
+          border-bottom: none !important;
+          box-shadow: none !important;
+          height: auto;
+        }
 
         .custom-brand {
           font-size: 1.4rem;
@@ -70,23 +70,12 @@ function Navbar({ user }) {
           font-weight: 600;
         }
 
-        .active-link::after {
-          content: '';
-          position: absolute;
-          bottom: -6px;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background-color: #6f42c1;
-          border-radius: 2px;
-        }
-
         .profile-img-sm {
           width: 32px;
           height: 32px;
           border-radius: 50%;
           object-fit: cover;
-          margin-right: 10px;
+          cursor: pointer;
         }
 
         .mobile-dropdown {
@@ -98,7 +87,7 @@ function Navbar({ user }) {
           border-radius: 10px;
           padding: 15px;
           width: 250px;
-          box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
           z-index: 1000;
         }
 
@@ -145,6 +134,12 @@ function Navbar({ user }) {
             display: block;
           }
         }
+
+        @media (max-width: 767px) {
+          .custom-navbar {
+            padding: 0.6rem 1rem;
+          }
+        }
       `}</style>
 
       <nav className="navbar navbar-expand-lg bg-light shadow-sm fixed-top custom-navbar">
@@ -165,11 +160,17 @@ function Navbar({ user }) {
             <li className="nav-item px-2">
               <NavLink to="/edit-student" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : 'custom-link'}`}>Edit Student</NavLink>
             </li>
-            {user && (
-              <li className="nav-item px-2">
-                <img src={photoURL || 'https://via.placeholder.com/50'} alt="Profile" className="profile-img-sm" />
-              </li>
-            )}
+      {user && (
+  <li className="nav-item px-2">
+    <img
+      src={photoURL || 'https://via.placeholder.com/50'}
+      alt="Profile"
+      className="profile-img-sm"
+      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+    />
+  </li>
+)}
+
           </ul>
 
           {/* Hamburger for small screens */}
@@ -189,7 +190,11 @@ function Navbar({ user }) {
                 <>
                   <hr />
                   <div className="d-flex align-items-center mb-2">
-                    <img src={photoURL || 'https://via.placeholder.com/50'} alt="Profile" className="profile-img-sm" />
+                    <img
+                      src={photoURL || 'https://via.placeholder.com/50'}
+                      alt="Profile"
+                      className="profile-img-sm"
+                    />
                     <div>
                       <div style={{ fontWeight: 600 }}>{displayName}</div>
                       <div style={{ fontSize: '0.85rem', wordBreak: 'break-word' }}>{email}</div>
