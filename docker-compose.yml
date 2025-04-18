@@ -79,8 +79,7 @@ services:
       - MONGO_URI=mongodb://mongo:27017/student_management_system
       - NODE_ENV=production
       - PORT=6969
-    volumes:
-      - ./backend:/app
+   
 
   # Frontend service (React)
   frontend:
