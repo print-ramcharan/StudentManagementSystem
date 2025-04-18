@@ -1,3 +1,5 @@
+# Dockerfile (frontend)
+
 FROM node:18
 
 WORKDIR /app
@@ -7,6 +9,14 @@ RUN npm install
 
 COPY . .
 
+# Build the React app
+RUN npm run build
+
+# Install a lightweight HTTP server to serve the static files
+RUN npm install -g serve
+
+# Expose the port that `serve` uses
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Serve the built app
+CMD ["serve", "-s", "build"]
