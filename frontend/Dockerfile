@@ -17,8 +17,9 @@ RUN npm install -g serve
 EXPOSE 8000
 
 # Add health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --spider --quiet http://localhost:8000/ || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD wget --spider --quiet http://localhost:8000/health.html || exit 1
+
 
 # Run the app
 CMD ["sh", "-c", "serve -s build -l 8000"]
