@@ -80,7 +80,7 @@ const AddStudentForm = () => {
 
     setIsValid(true);
     try {
-      await axios.post('http://localhost:6969/students', formData);
+      await axios.post('https://studentmanagementsystem-backend.onrender.com/students', formData);
       setMessage('Student added successfully!');
       setAlertType('success');
       setShowAlert(true);
@@ -106,7 +106,7 @@ const AddStudentForm = () => {
 
       try {
         for (const student of data) {
-          await axios.post('http://localhost:6969/students', student);
+          await axios.post('https://studentmanagementsystem-backend.onrender.com/students', student);
         }
         setMessage('Students added successfully!');
         setAlertType('success');

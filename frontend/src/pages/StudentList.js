@@ -20,7 +20,7 @@ function StudentList() {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('http://localhost:6969/students');
+      const response = await axios.get('https://studentmanagementsystem-backend.onrender.com/students');
       setStudents(response.data);
       setFilteredStudents(response.data);
       setLoading(false);
@@ -43,7 +43,7 @@ function StudentList() {
     if (!studentToDelete) return;
 
     try {
-      await axios.delete(`http://localhost:6969/students/${studentToDelete.studentId}`);
+      await axios.delete(`https://studentmanagementsystem-backend.onrender.com/students/${studentToDelete.studentId}`);
       const updated = students.filter(s => s.studentId !== studentToDelete.studentId);
       setStudents(updated);
       setFilteredStudents(updated);

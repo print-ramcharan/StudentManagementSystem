@@ -23,7 +23,7 @@ function Login() {
     }
 
     try {
-      const response = await fetch('http://localhost:6969/users/login-auth', {
+      const response = await fetch('https://studentmanagementsystem-backend.onrender.com/users/login-auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

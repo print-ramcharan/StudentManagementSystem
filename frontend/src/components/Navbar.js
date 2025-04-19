@@ -18,7 +18,6 @@ function Navbar({ user }) {
     navigate('/login');
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -117,6 +116,13 @@ function Navbar({ user }) {
         .logout-btn:hover {
           background-color: #c82333;
         }
+        .active-link {
+  color: #6f42c1 !important;
+  font-weight: 600;
+  background-color: #f3edfa;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
 
         .hamburger {
           display: none;
@@ -139,6 +145,11 @@ function Navbar({ user }) {
           .custom-navbar {
             padding: 0.6rem 1rem;
           }
+
+          .profile-img-sm {
+            width: 40px;
+            height: 40px;
+          }
         }
       `}</style>
 
@@ -160,17 +171,24 @@ function Navbar({ user }) {
             <li className="nav-item px-2">
               <NavLink to="/edit-student" className={({ isActive }) => `nav-link ${isActive ? 'active-link' : 'custom-link'}`}>Edit Student</NavLink>
             </li>
-      {user && (
-  <li className="nav-item px-2">
-    <img
-      src={photoURL || 'https://via.placeholder.com/50'}
-      alt="Profile"
-      className="profile-img-sm"
-      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-    />
-  </li>
-)}
 
+            {user && (
+              <li className="nav-item px-2 position-relative d-none d-lg-block">
+                <img
+                  src={photoURL || 'https://via.placeholder.com/50'}
+                  alt="Profile"
+                  className="profile-img-sm"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                />
+                {isDropdownOpen && (
+                  <div className="mobile-dropdown" ref={dropdownRef}>
+                    <div style={{ fontWeight: 600, marginBottom: '5px' }}>{displayName}</div>
+                    <div style={{ fontSize: '0.85rem', marginBottom: '10px', wordBreak: 'break-word' }}>{email}</div>
+                    <button className="logout-btn" onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
 
           {/* Hamburger for small screens */}
@@ -180,11 +198,11 @@ function Navbar({ user }) {
 
           {/* Dropdown Menu on Small Screens */}
           {isDropdownOpen && (
-            <div className="mobile-dropdown" ref={dropdownRef}>
-              <NavLink to="/" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>Home</NavLink>
-              <NavLink to="/list-students" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>Student List</NavLink>
-              <NavLink to="/add-student" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>Add Student</NavLink>
-              <NavLink to="/edit-student" className="dropdown-item" onClick={() => setIsDropdownOpen(false)}>Edit Student</NavLink>
+            <div className="mobile-dropdown d-lg-none" ref={dropdownRef}>
+              <NavLink to="/" className={({ isActive }) => `dropdown-item ${isActive ? 'active-link' : ''}`} onClick={() => setIsDropdownOpen(false)}>Home</NavLink>
+<NavLink to="/list-students" className={({ isActive }) => `dropdown-item ${isActive ? 'active-link' : ''}`} onClick={() => setIsDropdownOpen(false)}>Student List</NavLink>
+<NavLink to="/add-student" className={({ isActive }) => `dropdown-item ${isActive ? 'active-link' : ''}`} onClick={() => setIsDropdownOpen(false)}>Add Student</NavLink>
+<NavLink to="/edit-student" className={({ isActive }) => `dropdown-item ${isActive ? 'active-link' : ''}`} onClick={() => setIsDropdownOpen(false)}>Edit Student</NavLink>
 
               {user && (
                 <>
@@ -195,7 +213,7 @@ function Navbar({ user }) {
                       alt="Profile"
                       className="profile-img-sm"
                     />
-                    <div>
+                    <div className="ms-2">
                       <div style={{ fontWeight: 600 }}>{displayName}</div>
                       <div style={{ fontSize: '0.85rem', wordBreak: 'break-word' }}>{email}</div>
                     </div>

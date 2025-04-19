@@ -83,7 +83,7 @@ const EditStudentForm = () => {
   </div>
 
     try {
-      const res = await axios.put(`http://localhost:6969/students/${studentData.studentId}`, studentData);
+      const res = await axios.put(`https://studentmanagementsystem-backend.onrender.com/students/${studentData.studentId}`, studentData);
       setMessage('Student data updated successfully!');
       setAlertType('success');
       setOriginalData(studentData);
