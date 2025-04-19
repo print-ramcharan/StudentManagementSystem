@@ -38,27 +38,29 @@ function Navbar({ user }) {
 
   return (
     <>
-      <style>{`
-        .custom-navbar { background-color: #fff; padding: 0.8rem 1.5rem; font-family: 'Inter', sans-serif; }
-        .custom-brand { font-size: 1.4rem; font-weight: 600; color: #6f42c1 !important; text-decoration: none; }
-        .navbar-nav .nav-item { margin-left: 1.5rem; }
-        .custom-link { font-size: 1rem; font-weight: 500; color: #555; transition: color 0.3s; }
-        .custom-link:hover { color: #6f42c1; }
-        .active-link { color: #6f42c1 !important; font-weight: 600; background: #f3edfa; border-radius: 6px; padding: 6px 10px; }
-        .profile-img-sm { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; cursor: pointer; }
-        .mobile-dropdown {
-          position: absolute; top: 60px; right: 20px;
-          background: #fff; border: 1px solid #ccc; border-radius: 10px;
-          padding: 15px; width: 250px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index:1000;
-        }
-        .logout-btn {
-          margin-top: 10px; width:100%; padding:8px;
-          background:#dc3545; color:#fff; border:none; border-radius:6px; cursor:pointer;
-        }
-        .logout-btn:hover { background:#c82333; }
-        @media (max-width:991px) { .d-lg-flex { display:none!important; } }
-        @media (max-width:767px) { .custom-navbar { padding:0.6rem 1rem; } .profile-img-sm { width:40px; height:40px; } }
-      `}</style>
+   <style>{`
+    .custom-navbar { background-color: #fff; padding: 0.8rem 1.5rem; font-family: 'Inter', sans-serif; }
+    .custom-brand { font-size: 1.4rem; font-weight: 600; color: #6f42c1 !important; text-decoration: none; }
+    .navbar-nav .nav-item { margin-left: 1.5rem; }
+    .custom-link { font-size: 1rem; font-weight: 500; color: #555; transition: color 0.3s; text-decoration: none; border-bottom: none; } /* Removed any underline */
+    .custom-link:hover { color: #6f42c1; text-decoration: none; border-bottom: 2px solid #6f42c1; } /* Purple underline on hover */
+    .active-link { color: #6f42c1 !important; font-weight: 600; background: #f3edfa; border-radius: 6px; padding: 6px 10px; }
+    .profile-img-sm { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; cursor: pointer; }
+    .mobile-dropdown {
+      position: absolute; top: 60px; right: 20px;
+      background: #fff; border: 1px solid #ccc; border-radius: 10px;
+      padding: 15px; width: 250px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index:1000;
+    }
+    .logout-btn {
+      margin-top: 10px; width:100%; padding:8px;
+      background:#dc3545; color:#fff; border:none; border-radius:6px; cursor:pointer;
+    }
+    .logout-btn:hover { background:#c82333; }
+    @media (max-width:991px) { .d-lg-flex { display:none!important; } }
+    @media (max-width:767px) { .custom-navbar { padding:0.6rem 1rem; } .profile-img-sm { width:40px; height:40px; } }
+  `}</style>
+
+
 
       <nav className="navbar navbar-expand-lg bg-light shadow-sm fixed-top custom-navbar">
         <div className="container d-flex justify-content-between align-items-center">

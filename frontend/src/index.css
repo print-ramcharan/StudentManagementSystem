@@ -14,7 +14,8 @@ code {
 .active-link {
   color: #6f42c1 !important;
   font-weight: 600;
-}/* Navbar.css */
+}
+/* Navbar.css
 
 .custom-navbar {
   background-color: #fff;
@@ -60,7 +61,7 @@ code {
   height: 2px;
   background-color: #6f42c1;
   border-radius: 2px;
-}
+} */
 
 /* //button dark mode */
 .btn-close.custom-dark {
