@@ -5,7 +5,7 @@ COPY . .
 RUN npm install
 RUN npm run build
 
-# Production Stage: Serve the app using the serve package
+# Production Stage
 FROM node:20-alpine
 WORKDIR /app
 COPY --from=build /app/build /app/build
@@ -13,8 +13,12 @@ COPY --from=build /app/build /app/build
 # Install serve
 RUN npm install -g serve
 
-# Expose the default port 3000
+# Expose port
 EXPOSE 8000
 
-# Use a shell command to run the app with the serve package
+# Add health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --spider --quiet http://localhost:8000/ || exit 1
+
+# Run the app
 CMD ["sh", "-c", "serve -s build -l 8000"]
