@@ -1,5 +1,3 @@
-// src/components/Navbar.js
-
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
@@ -26,7 +24,6 @@ function Navbar({ user }) {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // if click is outside the dropdown, close it
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
@@ -66,7 +63,6 @@ function Navbar({ user }) {
         <div className="container d-flex justify-content-between align-items-center">
           <NavLink className="navbar-brand custom-brand" to="/">Student Management</NavLink>
 
-          {/* Desktop Links */}
           <ul className="navbar-nav ms-auto d-none d-lg-flex align-items-center">
             {['/', '/list-students', '/add-student', '/edit-student'].map((path, i) => {
               const labels = ['Home','Student List','Add Student','Edit Student'];
@@ -110,20 +106,18 @@ function Navbar({ user }) {
             )}
           </ul>
 
-          {/* Mobile Hamburger */}
-          <button
+           <button
             className="hamburger d-lg-none"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             ☰
           </button>
 
-          {/* Mobile Dropdown */}
           {isDropdownOpen && user && (
             <div
               className="mobile-dropdown d-lg-none"
               ref={dropdownRef}
-              onMouseDown={e => e.stopPropagation()}  // ← same fix for mobile
+              onMouseDown={e => e.stopPropagation()} 
             >
               {['/','/list-students','/add-student','/edit-student'].map((path,i) => {
                 const labels = ['Home','Student List','Add Student','Edit Student'];
