@@ -13,20 +13,16 @@ function Login() {
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Manual email/password login
   const handleManualLogin = async (e) => {
-    console.log('[handleManualLogin] start', { email, password });
     e.preventDefault();
     setErrorMsg('');
 
     if (!email || !password) {
-      console.log('[handleManualLogin] validation failed');
       setErrorMsg('Please enter both email and password');
       return;
     }
 
     try {
-      console.log('[handleManualLogin] sending request to backend');
       const response = await fetch(
         'https://studentmanagementsystem-backend.onrender.com/users/login-auth',
         {
@@ -35,80 +31,55 @@ function Login() {
           body: JSON.stringify({ email, password }),
         }
       );
-      console.log('[handleManualLogin] response status:', response.status);
       const data = await response.json();
-      console.log('[handleManualLogin] response data:', data);
 
       if (!response.ok) {
-        console.log('[handleManualLogin] backend login failed');
         setErrorMsg(data.message || 'Login failed');
         return;
       }
 
-      console.log('[handleManualLogin] login success, storing tokens');
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
     } catch (error) {
-      console.error('[handleManualLogin] error:', error);
       setErrorMsg('Login error: ' + error.message);
     }
   };
 
-  // Microsoft OAuth login
   const handleMicrosoftLogin = async () => {
-    console.log('[handleMicrosoftLogin] start');
     const provider = new OAuthProvider('microsoft.com');
     provider.addScope('User.Read');
     provider.setCustomParameters({
-      tenant: '8ba02f42-a433-4ad5-bdab-0103a1bc5fa5' // your Tenant ID
-    });
-    console.log('[handleMicrosoftLogin] provider configured', {
-      scope: provider.scopes,
       tenant: '8ba02f42-a433-4ad5-bdab-0103a1bc5fa5'
     });
 
     try {
-      console.log('[handleMicrosoftLogin] calling signInWithPopup');
       const result = await signInWithPopup(auth, provider);
-      console.log('[handleMicrosoftLogin] signInWithPopup result:', result);
+      const userEmail = result.user.email;
+
+      if (!userEmail.endsWith('@cbit.org.in')) {
+        setErrorMsg('Only @cbit.org.in emails are allowed.');
+        return;
+      }
 
       const credential = OAuthProvider.credentialFromResult(result);
-      if (!credential) {
-        console.warn('[handleMicrosoftLogin] no credential returned');
-        throw new Error('No OAuth credential returned');
-      }
-      console.log('[handleMicrosoftLogin] credential:', credential);
+      const accessToken = credential?.accessToken;
 
-      const accessToken = credential.accessToken;
-      console.log('[handleMicrosoftLogin] accessToken:', accessToken);
+      if (accessToken) {
+        const photoResp = await fetch(
+          'https://graph.microsoft.com/v1.0/me/photo/$value',
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
 
-      // Fetch binary profile photo from Microsoft Graph
-      console.log('[handleMicrosoftLogin] fetching profile photo');
-      const photoResp = await fetch(
-        'https://graph.microsoft.com/v1.0/me/photo/$value',
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
+        if (photoResp.ok) {
+          const blob = await photoResp.blob();
+          const photoURL = URL.createObjectURL(blob);
+          await updateProfile(auth.currentUser, { photoURL });
         }
-      );
-      console.log('[handleMicrosoftLogin] photo response status:', photoResp.status, photoResp);
-
-      if (photoResp.ok) {
-        const blob = await photoResp.blob();
-        const photoURL = URL.createObjectURL(blob);
-        console.log('Blob:', blob, 'type:', blob.type, 'size:', blob.size);
-      
-        console.log('[handleMicrosoftLogin] photoURL created:', photoURL);
-
-        // Update Firebase user profile with photoURL
-        await updateProfile(auth.currentUser, { photoURL });
-
-        console.log('[handleMicrosoftLogin] Firebase profile updated with photoURL');
-      } else {
-        console.warn('[handleMicrosoftLogin] no profile photo or Graph API error', photoResp.status);
       }
 
-      console.log('[handleMicrosoftLogin] Microsoft login successful, user:', result.user);
       navigate('/');
     } catch (error) {
       console.error('[handleMicrosoftLogin] failed:', error);
@@ -159,12 +130,14 @@ function Login() {
         <div className="text-center text-muted mb-2">or</div>
         <button
           onClick={handleMicrosoftLogin}
-          className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
+          style={{ backgroundColor: '#6f42c1', color: '#fff', border: 'none' }}
+          className="btn w-100 d-flex align-items-center justify-content-center gap-2"
         >
           <i className="bi bi-microsoft"></i> Sign in with Microsoft
         </button>
 
         <p className="mt-4 text-center text-muted" style={{ fontSize: '0.9rem' }}>
+          Only <strong>@cbit.org.in</strong> accounts are allowed. <br />
           Your account will only be used for authentication purposes.
         </p>
       </div>
