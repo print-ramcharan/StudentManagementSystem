@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  GoogleAuthProvider,
-  signInWithPopup
+  OAuthProvider,
+  signInWithPopup,
+  updateProfile
 } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 
@@ -11,60 +12,109 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // For managing the modal state
 
+  // Manual email/password login
   const handleManualLogin = async (e) => {
+    console.log('[handleManualLogin] start', { email, password });
     e.preventDefault();
     setErrorMsg('');
 
     if (!email || !password) {
+      console.log('[handleManualLogin] validation failed');
       setErrorMsg('Please enter both email and password');
       return;
     }
 
     try {
-      const response = await fetch('https://studentmanagementsystem-backend.onrender.com/users/login-auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
+      console.log('[handleManualLogin] sending request to backend');
+      const response = await fetch(
+        'https://studentmanagementsystem-backend.onrender.com/users/login-auth',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+      console.log('[handleManualLogin] response status:', response.status);
       const data = await response.json();
+      console.log('[handleManualLogin] response data:', data);
 
       if (!response.ok) {
+        console.log('[handleManualLogin] backend login failed');
         setErrorMsg(data.message || 'Login failed');
         return;
       }
 
-      // ✅ Store and navigate
+      console.log('[handleManualLogin] login success, storing tokens');
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
     } catch (error) {
+      console.error('[handleManualLogin] error:', error);
       setErrorMsg('Login error: ' + error.message);
-      console.error('Manual login failed:', error.message);
     }
   };
 
-  const handleGoogleLogin = async () => {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
+  // Microsoft OAuth login
+  const handleMicrosoftLogin = async () => {
+    console.log('[handleMicrosoftLogin] start');
+    const provider = new OAuthProvider('microsoft.com');
+    provider.addScope('User.Read');
+    provider.setCustomParameters({
+      tenant: '8ba02f42-a433-4ad5-bdab-0103a1bc5fa5' // your Tenant ID
+    });
+    console.log('[handleMicrosoftLogin] provider configured', {
+      scope: provider.scopes,
+      tenant: '8ba02f42-a433-4ad5-bdab-0103a1bc5fa5'
+    });
 
-    console.log('Google login successful:', user);
-    
-    // Close the modal after successful login
-    setIsModalOpen(false); 
+    try {
+      console.log('[handleMicrosoftLogin] calling signInWithPopup');
+      const result = await signInWithPopup(auth, provider);
+      console.log('[handleMicrosoftLogin] signInWithPopup result:', result);
 
-    navigate('/');  // Navigate to the home page
-  } catch (error) {
-    console.error('Google login failed:', error.message);
-    setErrorMsg('Google login failed, please try again');
-  }
-};
+      const credential = OAuthProvider.credentialFromResult(result);
+      if (!credential) {
+        console.warn('[handleMicrosoftLogin] no credential returned');
+        throw new Error('No OAuth credential returned');
+      }
+      console.log('[handleMicrosoftLogin] credential:', credential);
+
+      const accessToken = credential.accessToken;
+      console.log('[handleMicrosoftLogin] accessToken:', accessToken);
+
+      // Fetch binary profile photo from Microsoft Graph
+      console.log('[handleMicrosoftLogin] fetching profile photo');
+      const photoResp = await fetch(
+        'https://graph.microsoft.com/v1.0/me/photo/$value',
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      console.log('[handleMicrosoftLogin] photo response status:', photoResp.status, photoResp);
+
+      if (photoResp.ok) {
+        const blob = await photoResp.blob();
+        const photoURL = URL.createObjectURL(blob);
+        console.log('Blob:', blob, 'type:', blob.type, 'size:', blob.size);
+      
+        console.log('[handleMicrosoftLogin] photoURL created:', photoURL);
+
+        // Update Firebase user profile with photoURL
+        await updateProfile(auth.currentUser, { photoURL });
+
+        console.log('[handleMicrosoftLogin] Firebase profile updated with photoURL');
+      } else {
+        console.warn('[handleMicrosoftLogin] no profile photo or Graph API error', photoResp.status);
+      }
+
+      console.log('[handleMicrosoftLogin] Microsoft login successful, user:', result.user);
+      navigate('/');
+    } catch (error) {
+      console.error('[handleMicrosoftLogin] failed:', error);
+      setErrorMsg('Microsoft login failed, please try again');
+    }
+  };
 
   return (
     <div className="container-fluid bg-light d-flex justify-content-center align-items-center vh-100">
@@ -90,7 +140,6 @@ function Login() {
               required
             />
           </div>
-
           <div className="mb-3">
             <label className="form-label text-primary">Password</label>
             <input
@@ -102,43 +151,18 @@ function Login() {
               required
             />
           </div>
-
           <button type="submit" className="btn btn-primary w-100 mb-3">
-            <i className="bi bi-box-arrow-in-right me-2"></i>Login
+            <i className="bi bi-box-arrow-in-right me-2"></i> Login
           </button>
         </form>
 
         <div className="text-center text-muted mb-2">or</div>
-
         <button
-          onClick={() => setIsModalOpen(true)} // Open the modal on button click
+          onClick={handleMicrosoftLogin}
           className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
         >
-          <i className="bi bi-google"></i> Sign in with Google
+          <i className="bi bi-microsoft"></i> Sign in with Microsoft
         </button>
-
-        {/* Google Login Modal */}
-        {isModalOpen && (
-          <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" aria-labelledby="googleLoginModal" aria-hidden="true">
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="googleLoginModal">Sign in with Google</h5>
-                  <button type="button" className="btn-close" onClick={() => setIsModalOpen(false)}></button>
-                </div>
-                <div className="modal-body">
-                  <p>Proceed to login with your Google account</p>
-                  <button
-                    onClick={handleGoogleLogin}
-                    className="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center gap-2"
-                  >
-                    <i className="bi bi-google"></i> Login with Google
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         <p className="mt-4 text-center text-muted" style={{ fontSize: '0.9rem' }}>
           Your account will only be used for authentication purposes.
