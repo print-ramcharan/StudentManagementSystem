@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { FaSearch, FaFileUpload } from 'react-icons/fa';
+import { BounceLoader } from 'react-spinners';
+import '../App.css'
 
 function StudentList() {
   const [students, setStudents] = useState([]);
@@ -20,7 +22,7 @@ function StudentList() {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('https://studentmanagementsystem-backend.onrender.com/students');
+      const response = await axios.get('https://studentmanagementsystem-backend.onrender.com/student');
       setStudents(response.data);
       setFilteredStudents(response.data);
       setLoading(false);
@@ -87,9 +89,21 @@ function StudentList() {
     reader.readAsBinaryString(file);
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-
+  if (loading) return (
+    <div className="loading-container">
+      <BounceLoader color="#6f42c1" size={60} />
+      <p>Loading...</p>
+    </div>
+  );
+  
+  if (error) return (
+    <div className="error-container">
+      <div className="error-message">
+        <i className="bi bi-exclamation-triangle-fill"></i>
+        <p>{error}</p>
+      </div>
+    </div>
+  );
   return (
     <div className="container mt-5 pt-0">
       <h2 className="mb-4 text-center">Student List</h2>

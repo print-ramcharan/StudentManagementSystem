@@ -1,0 +1,47 @@
+/* Loading state */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+  }
+  
+  .loading-container p {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #6f42c1;
+    font-weight: bold;
+  }
+  
+  /* Error state */
+  .error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+  }
+  
+  .error-message {
+    background-color: #ffcccc;
+    color: #e74c3c;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .error-message i {
+    font-size: 24px;
+    color: #e74c3c;
+  }
+  
+  .error-message p {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  

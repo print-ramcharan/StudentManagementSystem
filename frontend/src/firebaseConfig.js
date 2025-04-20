@@ -2,6 +2,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
+import { getFirestore } from 'firebase/firestore';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBiozLd-sLUUehzemkCFIExq7OQI8Do0r0",
   authDomain: "studentmanagementsystem-42862.firebaseapp.com",
@@ -15,6 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const db = getFirestore(app);
+
 const googleProvider = new GoogleAuthProvider();
 
-export { auth, googleProvider  };
+export { auth, googleProvider,db  };
