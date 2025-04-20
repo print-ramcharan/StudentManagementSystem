@@ -22,7 +22,7 @@ function StudentList() {
 
   const fetchStudents = async () => {
     try {
-      const response = await axios.get('https://studentmanagementsystem-backend.onrender.com/student');
+      const response = await axios.get('https://studentmanagementsystem-backend.onrender.com/students');
       setStudents(response.data);
       setFilteredStudents(response.data);
       setLoading(false);
