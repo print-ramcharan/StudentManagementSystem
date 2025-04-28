@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
 import { FaSearch, FaFileUpload } from 'react-icons/fa';
 import { BounceLoader } from 'react-spinners';
-import '../App.css'
+import '../App.css';
 
 function StudentList() {
   const [students, setStudents] = useState([]);
@@ -106,7 +106,8 @@ function StudentList() {
   );
   return (
     <div className="container mt-5 pt-0">
-      <h2 className="mb-4 text-center">Student List</h2>
+      <br/>
+      <h2 className="mb-4  theme-color fw-bold text-center">Student List</h2>
 
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-3">
        
@@ -139,19 +140,21 @@ function StudentList() {
       </div>
 
       <div className="table-responsive-sm">
-        <table className="table table-bordered table-hover" style={{ color: '#6f42c1' }}>
-          <thead>
-            <tr style={{ backgroundColor: '#6f42c1', color: 'white' }}>
-              <th>#</th>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Date of Birth</th>
-              <th>Department</th>
-              <th>Enrollment Year</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+      <table className="table table-bordered table-hover" style={{ color: '#6f42c1' }}>
+  <thead>
+    <tr style={{ backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold' }}>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>RollNo</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Full Name</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Email</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Date of Birth</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Department</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Enrollment Year</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Status</th>
+      <th style={{backgroundColor: '#6f42c1', color: 'white', fontWeight: 'bold'}}>Actions</th>
+    </tr>
+  </thead>
+
+
           <tbody>
             {filteredStudents.map((student) => (
               <tr key={student.studentId}>
@@ -161,7 +164,10 @@ function StudentList() {
                 <td>{new Date(student.dob).toLocaleDateString()}</td>
                 <td>{student.department}</td>
                 <td>{student.enrollmentYear}</td>
-                <td>{student.isActive ? 'Active' : 'Inactive'}</td>
+                <td>{student.isActive ? (<i className="bi bi-check-circle" style={{ color: 'green' }}></i>) :
+                                        (<i className="bi bi-x-circle" style={{ color: 'red' }}></i> )}
+                </td>
+
                 <td>
                   <div className="btn-group" role="group">
                     <button className="btn btn-primary btn-sm" onClick={() => handleEdit(student)}>Edit</button>

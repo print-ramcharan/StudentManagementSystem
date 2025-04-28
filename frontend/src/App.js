@@ -1,8 +1,6 @@
 // App.js
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './firebaseConfig';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import StudentList from './pages/StudentList';
@@ -24,32 +22,30 @@ function AppContent() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
+    if (!user && location.pathname !== '/login') {
+      navigate('/login');
+    }
+    if (user && location.pathname === '/login') {
+      navigate('/');
+    }
+  }, [location.pathname, navigate, user]);
 
-      if (!authUser && location.pathname !== '/login') {
-        navigate('/login');
-      }
-
-      if (authUser && location.pathname === '/login') {
-        navigate('/');
-      }
-    });
-
-    return () => unsubscribe();
-  }, [location.pathname, navigate]);
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
 
   return (
     <>
-      {user && <Navbar user={user} />}
+     {user && <Navbar user={user} setUser={setUser} />}
+
       <br/>
       <br/>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={user ? <Home /> : <Login />} />
-        <Route path="/list-students" element={user ? <StudentList /> : <Login />} />
-        <Route path="/add-student" element={user ? <AddStudent /> : <Login />} />
-        <Route path="/edit-student" element={user ? <EditStudentForm /> : <Login />} />
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/" element={user ? <Home /> : <Login onLogin={handleLogin} />} />
+        <Route path="/list-students" element={user ? <StudentList /> : <Login onLogin={handleLogin} />} />
+        <Route path="/add-student" element={user ? <AddStudent /> : <Login onLogin={handleLogin} />} />
+        <Route path="/edit-student" element={user ? <EditStudentForm /> : <Login onLogin={handleLogin} />} />
       </Routes>
     </>
   );

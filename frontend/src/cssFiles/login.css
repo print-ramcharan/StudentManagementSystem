@@ -1,0 +1,70 @@
+body {
+    font-family: 'Poppins', 'Roboto', sans-serif;
+    background: #f8f9fa; 
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container-fluid {
+    background: linear-gradient(to right, #6f42c1, #8e63d3);
+  }
+  
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    border: none;
+    box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  
+  h3 {
+    font-weight: 600;
+    color: #6f42c1;
+  }
+  
+  .text-primary {
+    color: #6f42c1 !important;
+  }
+  
+  .btn-primary {
+    background-color: #6f42c1;
+    border: none;
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #5a35a0;
+    transform: scale(1.03);
+  }
+  
+  .form-control {
+    border-radius: 12px;
+    border: 1px solid #ced4da;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .form-control:focus {
+    border-color: #6f42c1;
+    box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
+  }
+  
+  .alert-danger {
+    border-radius: 12px;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  @media (max-width: 576px) {
+    .card {
+      padding: 1.5rem;
+    }
+  }
+  

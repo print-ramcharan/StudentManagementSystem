@@ -85,6 +85,17 @@ const AddStudentForm = () => {
       setAlertType('success');
       setShowAlert(true);
       form.classList.remove('was-validated');
+      form.reset();
+      setFormData({
+        firstName: '',
+        lastName: '',
+        studentId: '',
+        email: '',
+        dob: '',
+        enrollmentYear: '',
+        department: '',
+        isActive: false
+      });
     } catch (error) {
       setMessage(error.response ? error.response.data.error : error.message);
       setAlertType('danger');

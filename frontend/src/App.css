@@ -1,47 +1,31 @@
-/* Loading state */
-.loading-container {
+
+  /* Loading Screen */
+  .loading-container {
+    height: 60vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f7f7f7;
   }
   
   .loading-container p {
-    margin-top: 10px;
-    font-size: 1.2rem;
+    margin-top: 1rem;
     color: #6f42c1;
-    font-weight: bold;
+    font-weight: 600;
   }
   
-  /* Error state */
+  /* Error Screen */
   .error-container {
+    height: 60vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f7f7f7;
   }
   
   .error-message {
-    background-color: #ffcccc;
-    color: #e74c3c;
-    padding: 20px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .error-message i {
-    font-size: 24px;
-    color: #e74c3c;
-  }
-  
-  .error-message p {
-    font-size: 1.2rem;
-    margin: 0;
+    color: red;
+    font-size: 1.5rem;
+    font-weight: 600;
   }
   
